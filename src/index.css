@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+@import "./design-system/tokens.css";
+
+@theme {
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Manrope", ui-sans-serif, system-ui, sans-serif;
+
+  --color-ink: var(--ds-fg);
+  --color-ink-muted: var(--ds-fg-muted);
+  --color-ink-faint: var(--ds-fg-faint);
+  --color-paper: var(--ds-bg);
+  --color-paper-elevated: var(--ds-bg-elevated);
+  --color-line: var(--ds-border);
+
+  --color-steel: var(--ds-accent);
+  --color-steel-soft: var(--ds-neutral-500);
+  --color-amber: var(--ds-primary);
+  --color-amber-hover: var(--ds-primary-hover);
+  --color-amber-active: var(--ds-primary-active);
+  --color-amber-soft: var(--ds-primary-muted);
+
+  --color-cyan: var(--ds-cyan);
+  --color-cyan-soft: var(--ds-cyan-soft);
+
+  --color-primary: var(--ds-primary);
+  --color-primary-hover: var(--ds-primary-hover);
+  --color-primary-active: var(--ds-primary-active);
+  --color-primary-soft: var(--ds-primary-soft);
+  --color-primary-fg: var(--ds-fg-on-accent);
+
+  --color-success: var(--ds-success);
+  --color-success-hover: var(--ds-success-hover);
+  --color-success-soft: var(--ds-success-soft);
+  --color-success-fg: var(--ds-fg-on-accent);
+
+  --color-warning: var(--ds-warning);
+  --color-warning-hover: var(--ds-warning-hover);
+  --color-warning-soft: var(--ds-warning-soft);
+
+  --color-danger: var(--ds-danger);
+  --color-danger-hover: var(--ds-danger-hover);
+  --color-danger-soft: var(--ds-danger-soft);
+  --color-danger-fg: var(--ds-fg-on-accent);
+
+  --color-info: var(--ds-info);
+  --color-info-hover: var(--ds-info-hover);
+  --color-info-soft: var(--ds-info-soft);
+
+  --radius-sm: var(--ds-radius-sm);
+  --radius-md: var(--ds-radius-md);
+  --radius-lg: var(--ds-radius-lg);
+  --radius-xl: var(--ds-radius-xl);
+  --radius-2xl: var(--ds-radius-2xl);
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: var(--font-sans);
+    letter-spacing: -0.01em;
+    color: var(--ds-fg);
+    background:
+      radial-gradient(
+        900px 420px at 12% -8%,
+        color-mix(in srgb, var(--ds-blue-400) 18%, transparent),
+        transparent 60%
+      ),
+      radial-gradient(
+        700px 360px at 92% 0%,
+        color-mix(in srgb, var(--ds-cyan-400) 12%, transparent),
+        transparent 55%
+      ),
+      linear-gradient(180deg, #f8fbff 0%, var(--ds-bg) 42%, #eef2f7 100%);
+    background-attachment: fixed;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+
+  .font-display {
+    letter-spacing: -0.03em;
+    font-weight: 700;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--ds-primary) 22%, transparent);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-up,
+.animate-fade-in {
+  animation: fade-in var(--ds-duration) var(--ds-ease) both;
+}
+
+.stagger > * {
+  animation: none;
+}
