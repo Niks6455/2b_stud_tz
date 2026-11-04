@@ -80,7 +80,7 @@ export function LoginPage() {
       </aside>
 
       <div className="relative flex flex-1 items-center justify-center overflow-hidden px-4 py-12">
-        <LoginCrane />
+        <LoginCrane className="hidden lg:block" />
 
         <div className="relative z-10 w-full max-w-sm">
           <div className="mb-8 lg:hidden">
