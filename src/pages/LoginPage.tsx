@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { AlertCircle, Building2, Eye, EyeOff } from 'lucide-react'
 import { Button, Input, Spinner } from '@/components/atoms'
 import { FormField } from '@/components/molecules'
+import { LoginCrane } from '@/components/organisms'
 import { useAuth } from '@/features/auth/AuthProvider'
 import { mapAuthError } from '@/features/auth/errors'
 import {
@@ -78,8 +79,10 @@ export function LoginPage() {
         />
       </aside>
 
-      <div className="flex flex-1 items-center justify-center px-4 py-12">
-        <div className="w-full max-w-sm">
+      <div className="relative flex flex-1 items-center justify-center overflow-hidden px-4 py-12">
+        <LoginCrane />
+
+        <div className="relative z-10 w-full max-w-sm">
           <div className="mb-8 lg:hidden">
             <div className="mb-4 flex items-center gap-2">
               <span className="flex size-8 items-center justify-center rounded-md bg-primary text-white">
@@ -97,7 +100,7 @@ export function LoginPage() {
           </p>
 
           <form
-            className="mt-8 rounded-xl border border-line bg-paper-elevated p-5 md:p-6"
+            className="mt-8 rounded-xl border border-line bg-paper-elevated/95 p-5 shadow-[var(--ds-shadow-md)] backdrop-blur-[2px] md:p-6"
             onSubmit={handleSubmit(async (values) => {
               setError(null)
               try {

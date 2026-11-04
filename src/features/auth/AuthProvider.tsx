@@ -4,9 +4,11 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import type { Session, User } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase'
 import type { Profile } from '@/shared/types/database'
@@ -35,9 +37,15 @@ async function fetchProfile(userId: string): Promise<Profile | null> {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const queryClient = useQueryClient()
   const [session, setSession] = useState<Session | null>(null)
   const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
+  const userIdRef = useRef<string | null>(null)
+
+  const clearCachedData = useCallback(() => {
+    queryClient.clear()
+  }, [queryClient])
 
   const refreshProfile = useCallback(async () => {
     const {
@@ -56,6 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     supabase.auth.getSession().then(async ({ data }) => {
       if (!mounted) return
+      userIdRef.current = data.session?.user?.id ?? null
       setSession(data.session)
       if (data.session?.user) {
         try {
@@ -71,6 +80,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      const nextUserId = nextSession?.user?.id ?? null
+      const prevUserId = userIdRef.current
+
+      // Drop previous user's cached queries on logout or account switch.
+      if (prevUserId !== nextUserId) {
+        clearCachedData()
+        userIdRef.current = nextUserId
+      }
+
       setSession(nextSession)
       if (!nextSession?.user) {
         setProfile(null)
@@ -90,7 +108,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       mounted = false
       subscription.unsubscribe()
     }
-  }, [])
+  }, [clearCachedData])
 
   const signIn = useCallback(async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password })
@@ -100,8 +118,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signOut = useCallback(async () => {
     const { error } = await supabase.auth.signOut()
     if (error) throw error
+    clearCachedData()
     setProfile(null)
-  }, [])
+  }, [clearCachedData])
 
   const value = useMemo(
     () => ({

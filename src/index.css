@@ -104,9 +104,68 @@
   to { opacity: 1; }
 }
 
+@keyframes crane-slide-in {
+  0% {
+    opacity: 0;
+    transform: translateX(12%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes crane-sway {
+  0%,
+  100% {
+    transform: rotate(-0.6deg);
+  }
+  50% {
+    transform: rotate(0.8deg);
+  }
+}
+
+@keyframes crane-hook {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(2.5deg);
+  }
+}
+
+@keyframes crane-hook-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
 .animate-fade-up,
 .animate-fade-in {
   animation: fade-in var(--ds-duration) var(--ds-ease) both;
+}
+
+.login-crane__slide {
+  animation: crane-slide-in 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.login-crane__hook-head {
+  transform-origin: 0 150px;
+  animation: crane-hook-bob 3.8s ease-in-out 1.2s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-crane__slide,
+  .login-crane__hook-head {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .stagger > * {

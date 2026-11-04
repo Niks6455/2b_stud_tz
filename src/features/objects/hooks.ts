@@ -10,17 +10,22 @@ import {
 import type { ObjectFormValues } from './schemas'
 
 export function useObjects() {
+  const { user } = useAuth()
+
   return useQuery({
-    queryKey: ['objects'],
+    queryKey: ['objects', user?.id],
     queryFn: listObjects,
+    enabled: Boolean(user?.id),
   })
 }
 
 export function useObject(id: string | undefined) {
+  const { user } = useAuth()
+
   return useQuery({
-    queryKey: ['objects', id],
+    queryKey: ['objects', id, user?.id],
     queryFn: () => getObject(id!),
-    enabled: Boolean(id),
+    enabled: Boolean(id && user?.id),
   })
 }
 

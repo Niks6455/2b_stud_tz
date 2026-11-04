@@ -23,29 +23,37 @@ export function useTasks(filters?: { objectId?: string; mine?: boolean }) {
         objectId: filters?.objectId,
         assigneeId: filters?.mine ? user?.id : undefined,
       }),
+    enabled: Boolean(user?.id),
   })
 }
 
 export function useTask(id: string | undefined) {
+  const { user } = useAuth()
+
   return useQuery({
-    queryKey: ['tasks', 'detail', id],
+    queryKey: ['tasks', 'detail', id, user?.id],
     queryFn: () => getTask(id!),
-    enabled: Boolean(id),
+    enabled: Boolean(id && user?.id),
   })
 }
 
 export function useTaskHistory(taskId: string | undefined) {
+  const { user } = useAuth()
+
   return useQuery({
-    queryKey: ['tasks', 'history', taskId],
+    queryKey: ['tasks', 'history', taskId, user?.id],
     queryFn: () => listTaskHistory(taskId!),
-    enabled: Boolean(taskId),
+    enabled: Boolean(taskId && user?.id),
   })
 }
 
 export function useExecutors() {
+  const { user } = useAuth()
+
   return useQuery({
-    queryKey: ['executors'],
+    queryKey: ['executors', user?.id],
     queryFn: listExecutors,
+    enabled: Boolean(user?.id),
   })
 }
 
